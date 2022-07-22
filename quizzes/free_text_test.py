@@ -1,24 +1,14 @@
 from ipywidgets import widgets
+from .quiz import Quiz
 
-class FreeTextTest:
-    def __init__(self, description="", answer=""):
-        self._output = widgets.Output()
-        self.description = description
-        self._description = widgets.HTML(value=self.description)
-
+class FreeTextTest(Quiz):
+    def __init__(self, description="", answer="", show_answer=False):
+        super().__init__(description, answer, show_answer)
         self.answer = answer
         self.entered = None
         self._entry = widgets.Textarea(
             value=None,
             placeholder='Type something',
-        )
-
-        self._submit = widgets.Button(description="Submit")
-        self._submit.on_click(self._submit_answer)
-
-        self.response = ""
-        self._response = self._response = widgets.HTML(
-            value=self.response
         )
 
         self._box = widgets.VBox(
