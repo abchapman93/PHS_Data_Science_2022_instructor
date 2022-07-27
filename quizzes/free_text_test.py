@@ -4,7 +4,9 @@ from .quiz import Quiz
 class FreeTextTest(Quiz):
     def __init__(self, description="", answer="", show_answer=False):
         super().__init__(description, answer, show_answer)
-        self.answer = answer
+        if type(answer) in (str, int, float):
+            answer = [str(answer)]
+        self.answer = [str(a).replace("\'", "\"") for a in answer]
         self.entered = None
         self._entry = widgets.Textarea(
             value=None,
@@ -23,12 +25,12 @@ class FreeTextTest(Quiz):
         )
 
     def _submit_answer(self, change):
-        self.entered = self._entry.value.strip()
+        self.entered = self._entry.value.strip().replace("\'", "\"")
         self._validate_answer()
 
     def _validate_answer(self):
         # If there's already a response, remove it
-        if self.entered == self.answer:
+        if self.entered in self.answer:
             self.response = "That is correct!"
         else:
             self.response = "That is incorrect."

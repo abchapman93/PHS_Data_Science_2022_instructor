@@ -2,8 +2,8 @@ import ipywidgets as widgets
 from random import shuffle
 from .quiz import Quiz
 
-class MultipleChoiceQuiz(Quiz):
-    def __init__(self, description="", answer="True", options=("True", "False"), show_answer=False, shuffle_answer=True):
+class SelectMultipleQuiz(Quiz):
+    def __init__(self, description="", answer=tuple(), options=tuple(), show_answer=False, shuffle_answer=True):
         options = list(options)
         if answer not in options:
             options.append(answer)
@@ -12,7 +12,7 @@ class MultipleChoiceQuiz(Quiz):
         if shuffle_answer:
             shuffle(options)
         self.options = options
-        self._options = widgets.RadioButtons(
+        self._options = widgets.SelectMultiple(
             options=self.options
         )
 
