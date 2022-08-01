@@ -3,6 +3,7 @@ from .function_test import FunctionTest
 from .free_text_test import FreeTextTest
 from .select_multiple_quiz import SelectMultipleQuiz
 from .value_test import ValueTest
+from .quiz_hint import QuizHint
 from datetime import datetime
 
 test_day_of_week = MultipleChoiceQuiz(description="<strong>1.Multiple choice</strong> </br>What day of the week is it?",
