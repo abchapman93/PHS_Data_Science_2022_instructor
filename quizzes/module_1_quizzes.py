@@ -7,13 +7,18 @@ from .quiz_hint import QuizHint
 from datetime import datetime
 import ipywidgets as widgets
 
-test_day_of_week = MultipleChoiceQuiz(description="<strong>1.Multiple choice</strong> </br>What day of the week is it?",
+test_day_of_week = MultipleChoiceQuiz(description="What day of the week is it?",
                    answer=datetime.now().strftime('%A'),
                   options=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
                   show_answer=True)
 
-test_state = FreeTextTest(description="<strong>1. Free text</strong> </br>What state are we in? (No abbreviations!)",
+test_state = FreeTextTest(description="What state are we in? (No abbreviations!)",
              answer="Utah")
+
+prime_mc = SelectMultipleQuiz("Which of the following numbers are prime? (Select all that apply.)",
+                   answer=[2, 3, 5],
+                  options=[2, 3, 4, 5, 6],
+                  shuffle_answer=False)
 
 quiz1 = MultipleChoiceQuiz(
     description='<strong>1.</strong> What class is x? </br><p style="font-family:courier";>x = 3</p>',
@@ -49,8 +54,49 @@ def test_add_validation_func(add_submitted):
             return
     print("Correct!")
 
+x_y_changing_var_quiz = MultipleChoiceQuiz(description='What is the value of: <p style="font-family:courier";>add(x,y)</p>',
+                   options=[11, 12, 4, 9], answer=11)
+
+test_r_equals_2 = ValueTest(2, True)
+test_pi_equals = ValueTest(3.14, True)
+
+quiz_data_type_2_pi_r = MultipleChoiceQuiz(description='What data type is: <p style="font-family:courier";>2*r*pi</p>', answer="float",
+                  options=["int", "float", "variable", "other"])
+
+quiz_2_pi_r_part2 = MultipleChoiceQuiz(description='How about: <p style="font-family:courier";>int(2*float(r)*int(pi))</p>',
+                   answer="int",
+                  options=["int", "float", "variable", "other"])
+
+quiz_y_gt_z = FreeTextTest(description="What code would test whether y is greater than z?",
+                          answer=["y>z", "z<y"],
+                          preprocessor=lambda x:x.replace(" ", ""))
+
+quiz_y_lte_z = FreeTextTest(description="What code would test whether z less than or equal to y?",
+                          answer=["z<=y", "y>=z"],
+                          preprocessor=lambda x:x.replace(" ", ""))
+
+quiz_y_ne_z = FreeTextTest(description="What code would test whether z is not equal to y?",
+                          answer=["z!=y", "y!=z"],
+                          preprocessor=lambda x:x.replace(" ", ""))
 
 test_add_function = FunctionTest(validation_func=test_add_validation_func)
+
+quiz_select_all_true = SelectMultipleQuiz(description="""
+    Which of the following lines of code would evaluate as True?
+    Use the values y = 10 and z = 5.
+    """,
+                                          answer=[
+                                              "not (True & False)",
+                                              "(not True) or (not False)",
+                                              "True or False",
+                                              "(y == 10) or (z < 5)",
+
+                                          ],
+                                          options=[
+                                              "not ((y != 10) & z >= 5)",
+                                              "y == z"
+                                          ]
+                                          )
 
 ethnicity_descr_hint = QuizHint(hints=[
     widgets.HTML(
