@@ -5,6 +5,7 @@ from .select_multiple_quiz import SelectMultipleQuiz
 from .value_test import ValueTest
 from .quiz_hint import QuizHint
 from datetime import datetime
+import ipywidgets as widgets
 
 test_day_of_week = MultipleChoiceQuiz(description="<strong>1.Multiple choice</strong> </br>What day of the week is it?",
                    answer=datetime.now().strftime('%A'),
@@ -50,3 +51,28 @@ def test_add_validation_func(add_submitted):
 
 
 test_add_function = FunctionTest(validation_func=test_add_validation_func)
+
+ethnicity_descr_hint = QuizHint(hints=[
+    widgets.HTML(
+        """Your plot should look something like:</br>
+        <img src="media/ethnicity_descr_counts.png"></img>
+        """
+    )
+])
+
+age_at_discharge_mc_quiz = MultipleChoiceQuiz("What are the mean and median ages at discharge?",
+                                              answer="70.29; 73.41",
+                                              options=["73.41; 70.29", "61.14; 105.42"],
+
+                                              )
+
+hint_2_2 = QuizHint(description="Visualization hints",
+        hints=[
+            widgets.HTML("""One option is a histogram:</br>
+            <img src="./media/age_at_discharge_hist.png"></img>
+            """),
+            widgets.HTML("""One option is a histogram:</br>
+            <img src="./media/age_at_discharge_boxplot.png"></img>
+            """),
+        ]
+        )
