@@ -81,6 +81,80 @@ quiz_y_ne_z = FreeTextTest(description="What code would test whether z is not eq
 
 test_add_function = FunctionTest(validation_func=test_add_validation_func)
 
+test_random_list_smallest = ValueTest(expected=[10, 12, 13], show_answer=True)
+
+test_random_list_largest = ValueTest(expected=[92, 97, 97], show_answer=True)
+
+quiz_tup_append = MultipleChoiceQuiz(answer="An error will be raised.", options=["x_tup will equal (1,2,3,4)", "Nothing.", "A new tuple will be returned"])
+
+quiz_set_tup_index = MultipleChoiceQuiz(answer="An error will be raised.", options=["x_tup will equal (1,'a', 3)", "Nothing.", "A new tuple will be returned"])
+
+quiz_x_tup_4_5 = MultipleChoiceQuiz(answer="b", options=["a", "b", "c", "a and b", "All of the above", "None of the above"], shuffle_answer=False)
+
+quiz_type_sorted_tup = MultipleChoiceQuiz(answer="list", options=["tuple", "list", "other"])
+
+test_x_list = ValueTest(expected=[1, 2, 3])
+
+quiz_test_x_list_equals_x = FreeTextTest(description="What code tests whether x_list equals x?", answer="x_list == x", preprocessor=lambda x:x.replace(" ",""))
+
+quiz_x_equals_x_list = MultipleChoiceQuiz(description="Are x and x_list equal?", options=["Yes", "No"], answer="Yes", shuffle_answer=False)
+
+quiz_code_1_in_primes = FreeTextTest(description="What code would check whether 1 is in primes?", answer="1 in primes")
+
+quiz_1_in_primes = MultipleChoiceQuiz(description="What is the value of the code from the answer above?",
+                  answer=False,
+                  options=[True, False], shuffle_answer=False)
+
+quiz_evens0 = MultipleChoiceQuiz(answer="An error would be raised.", options=["2", "4", "{2,4,6,8,10}"])
+
+test_even_primes = ValueTest(expected={2}, show_answer=True)
+
+quiz_len_odds_evens = FreeTextTest(answer=0)
+
+test_primes_not_odd = ValueTest(expected={2})
+
+test_len_pno_ep = FreeTextTest(answer=0)
+
+test_naturals_10 = ValueTest(expected={1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, show_answer=True)
+
+test_num_unq_cities = FreeTextTest(description="How many unique cities do our patients live in? (According to the data we have)", answer="5")
+
+test_capital_pa = FreeTextTest(answer='state_capitals["Pennsylvania"]')
+
+test_capital_idaho = ValueTest(expected="Boise")
+
+quiz_state_capitals2_ny = MultipleChoiceQuiz(answer="'New York City'", options=["An error would be raised.", "'Albany'", "['Albany', 'New York City']"])
+
+quiz_code_rachel_arrival = FreeTextTest("What code would give you the arrival time for Rachel?", answer='pt_arrivals["Rachel"]')
+
+test_check_pt_name = FreeTextTest(description="What code would check if there is someone named 'Jacob' in our arrivals dictionary?",
+            answer=["'Jacob' in pt_arrivals.keys()", "'Jacob' in pt_arrivals"])
+
+quiz_jacob_in_dict = MultipleChoiceQuiz("What would the answer to the code above be?",
+                   answer=False, options=[True, False], shuffle_answer=False)
+
+test_check_pt_time = FreeTextTest(description="What code would check if someone arrived at 7:00?",
+            answer="'7:00' in pt_arrivals.values()")
+
+quiz_dict_data_types = MultipleChoiceQuiz("What are the data types of the keys and values in the code above?",
+                  answer="str; set",
+                  options=["str; str", "str; dict", "dict; dict"])
+
+quiz_type_states_utah = MultipleChoiceQuiz('With the dictionary above, what is the data type of: <p style="font-family:courier";>states["Utah"]</p>',
+                  answer="dict", options=["str", "int", "list"]
+                  )
+
+quiz_ca_population = FreeTextTest("What code would give you the population of California?", answer='states["California"]["population"]')
+
+test_cities_ut_pa = ValueTest({'Erie',
+ 'Harrisburg',
+ 'Ogden',
+ 'Park City',
+ 'Philadelphia',
+ 'Pittsburgh',
+ 'Provo',
+ 'Salt Lake City'}, show_answer=True)
+
 quiz_select_all_true = SelectMultipleQuiz(description="""
     Which of the following lines of code would evaluate as True?
     Use the values y = 10 and z = 5.
