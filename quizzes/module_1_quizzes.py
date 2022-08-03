@@ -117,7 +117,7 @@ test_len_pno_ep = FreeTextTest(answer=0)
 
 test_naturals_10 = ValueTest(expected={1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, show_answer=True)
 
-test_num_unq_cities = FreeTextTest(description="How many unique cities do our patients live in? (According to the data we have)", answer="5")
+test_num_unq_cities = ValueTest(expected=5)
 
 test_capital_pa = FreeTextTest(answer='state_capitals["Pennsylvania"]')
 
