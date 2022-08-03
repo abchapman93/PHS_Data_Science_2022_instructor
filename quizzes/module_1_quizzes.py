@@ -144,6 +144,56 @@ quiz_type_states_utah = MultipleChoiceQuiz('With the dictionary above, what is t
                   answer="dict", options=["str", "int", "list"]
                   )
 
+quiz_second_element_x = FreeTextTest(description="What code would give you the second element of `x`?", answer="x[1]")
+
+quiz_data_types_z = MultipleChoiceQuiz(description="What are the data types of the three elements of `z`?",
+                                       answer="int; str; list",
+                                       options=[
+                                           "int; str; list",
+                                           "str; str; str",
+                                           "Invalid: A list can't have different data types."
+
+                                       ])
+
+quiz_x3 = MultipleChoiceQuiz(answer="An error would be raised.", options=[
+    "An error would be raised.",
+    "3",
+    "1 (indexing would start over)",
+    "None"
+])
+
+quiz_largest_idx_x = FreeTextTest(answer="2")
+
+quiz_second_to_last_x = MultipleChoiceQuiz(answer="All of the above.", options=[ "a)", "b)", "c)", "All of the above."])
+
+quiz_values_of_2 = MultipleChoiceQuiz(answer="a), b), and d)", options=["a), b), and d)", "a) and c)", "b)", "c)", "All of them"])
+
+test_x_sub1 = ValueTest(expected=[2, 3])
+
+quiz_x_colon = MultipleChoiceQuiz(answer="[1,2,3]", options=["[2]", "[1, 2]", "An error will be raised."])
+
+quiz_next_patient2 = MultipleChoiceQuiz(answer="Jim", options=["Jim", "Mary", "Chloe", "Rachel"])
+
+
+def test_waiting_list_jacob_validation_func(waiting_list):
+    if not isinstance(waiting_list, list):
+        print(f"Incorrect data type for `waiting_list`. Expected list, got {type(waiting_list)}")
+    if len(waiting_list) != 5:
+        print(f"Incorrect number of elements. Got {len(waiting_list)} elements, expected 5.")
+    if waiting_list[-1] != "Jacob":
+        print(f"Expected last value to be 'Jacob', not {waiting_list[-1]}")
+    print("That is correct!")
+
+test_waiting_list_jacob = ValueTest(validation_func=test_waiting_list_jacob_validation_func)
+
+test_next_patient3 = ValueTest("Jacob")
+
+test_list_a_added_to_b = ValueTest(expected=["a", "b", "c", 1, 2, 3])
+
+test_list_a_b_added_to_c = ValueTest(expected=[2, 4, '6', 1, 2, 3, 'a', 'b', 'c'])
+
+quiz_min_max_waiting_list = MultipleChoiceQuiz(answer="'Chloe'; 'Rachel'", options=["An error would be raised.", "'Jim'; 'Jacob'"])
+
 quiz_ca_population = FreeTextTest("What code would give you the population of California?", answer='states["California"]["population"]')
 
 test_cities_ut_pa = ValueTest({'Erie',
