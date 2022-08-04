@@ -32,6 +32,20 @@ quiz2 = MultipleChoiceQuiz(
     answer="float"
 )
 
+quiz_keyword_positional_args = SelectMultipleQuiz("Which of the following are valid calls to print_name? (ie., they won't throw an error)",
+                     answer={
+                         """print_name("Alec", "Chapman")""",
+                         """print_name("Alec", last="Chapman", middle="B.")""",
+                         """print_name(last="Alec", middle="Chapman", first="B.")""",
+
+                     },
+                     options={
+                         """print_name(last="Chapman")""",
+                         """print_name(first="Alec", "Chapman")""",
+                     }
+
+                     )
+
 test_max = FunctionTest(args=([1,2,3],), expected=3)
 
 test_x_equals_3 = ValueTest(3, show_answer=True)
