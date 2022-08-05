@@ -99,3 +99,12 @@ test_pna_only = FreeTextTest("How many patients have <strong>only</strong> pneum
 test_dx_subject_probs = ValueTest(expected={'pneumonia': 0.19030520646319568,
  'sepsis': 0.5451825254338719,
  'respiratory': 0.6852184320766008}, show_answer=True)
+
+hint_comorbidities = QuizHint(hints=[
+    widgets.HTML("""Refer back to the set methods we learned earlier. Imagine this problem as a venn diagram. Which parts of the venn diagram are these questions describing?""")
+])
+
+hint_prob_icd = QuizHint(hints=[
+   widgets.HTML("The probability of a patient having a disease can be calculated as the count of patients with the disease divided by the total number of patients (defined here as any of the patients in this dataset)."),
+    widgets.HTML("We calculated the total number of patients in 3.3")
+])
