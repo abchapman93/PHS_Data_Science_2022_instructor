@@ -318,6 +318,34 @@ quiz_execute_commute_drive = MultipleChoiceQuiz(description="", answer="True; Tr
     "False; False; True"
 ])
 
+hint_print_name = QuizHint(hints=[widgets.HTML("""If I ran this function without providing an argument for middle, it would print out 'My name is Alec Danger Chapman.'</br>
+If I gave it my middle initial of 'B.', it would print out 'My name is Alec B. Chapman'""")])
+
+hint_print_my_list = QuizHint(hints=[widgets.HTML("""The output should look like:</br><img src="./media/output_for_loop.png" width="50%" height="50%"></img>""")])
+
+quiz_raining_false = MultipleChoiceQuiz(answer="'You should walk to work.'", options=[
+    "'You should walk to work.'",
+    "'You should drive to work.'",
+    "Nothing will happen.",
+    "An error will be raised."
+])
+
+def validate_decide_to_drive2(func):
+    for a in (True, False):
+        for b in (True, False):
+            print(f"raining = {a}, hot = {b}")
+            if a or b:
+                expected = True
+            else:
+                expected = False
+            actual = func(a, b)
+            if actual != expected:
+                print("That is incorrect.")
+            else:
+                print("That is correct!")
+                print()
+test_decide_to_drive2 = FunctionTest(validation_func=validate_decide_to_drive2)
+
 def test_decide_to_bring_umbrella_validation_func(func):
     import inspect
     arg_spec = inspect.getfullargspec(func)
