@@ -261,7 +261,85 @@ hint_2_2 = QuizHint(description="Visualization hints",
         ]
         )
 
+hint_square_root = QuizHint(hints=[
+    widgets.HTML("sqrt(x) is the same as raising x to the 1/2"),
+    widgets.HTML("To raise a value to a power in Python, use two asterisks. For example: x squared = x**2")
+])
+
+test_my_mean = FunctionTest(args=([4, 0, 2, 2, 0, 10, 7, 8, 5, 0],), expected=3.8)
+
+
+def test_sd_validation_func(sd_submitted):
+    import math
+    a = [4, 0, 2, 2, 0, 10, 7, 8, 5, 0]
+
+    expected = np.std(a)
+    actual = sd_submitted(a)
+    if not math.isclose(actual, expected):
+        print(f"Incorrect. Expected {expected:.4f}, got {actual:.4f}")
+    print("Correct!")
+
+
+import numpy as np
+
+test_my_sd = FunctionTest(validation_func=test_sd_validation_func)
+
+
+def validate_execute_commute(func):
+    correct = True
+    mappings = {"green": "Go!", "yellow": "Slow down.", "red": "Stop!"}
+    for raining in (True, False):
+        for color in ("green", "yellow", "red"):
+            if raining is False:
+                expected = (False, "walk")
+            else:
+                expected = (True, mappings[color])
+            import io
+            from contextlib import redirect_stdout
+
+            f = io.StringIO()
+            with redirect_stdout(f):
+                actual = func(raining, color)
+
+            if actual != expected:
+                correct = False
+                print(
+                    f"Incorrect. When raining = {raining} and color = '{color}', expected {expected} but got {actual}")
+    if correct:
+        print("Correct!")
+
+
+test_execute_commute = FunctionTest(validation_func=validate_execute_commute)
+
+quiz_execute_commute_drive = MultipleChoiceQuiz(description="", answer="True; True; False", options=[
+    "True; True; False",
+    "True; False; True.",
+    "False; True; True",
+    "False; False; True"
+])
+
+def test_decide_to_bring_umbrella_validation_func(func):
+    import inspect
+    arg_spec = inspect.getfullargspec(func)
+    if len(arg_spec.args) > 1:
+        print(f"decide_to_drive should take one argument named 'raining'. Got {arg_spec.args}")
+    import contextlib
+    with contextlib.redirect_stdout(None):
+        for val_in in (True, False):
+
+            val_out = func(raining=val_in)
+    try:
+        assert val_in is val_out
+    except AssertionError:
+        print(f"Incorrect. When raining = {val_in}, return value should be {val_in}, not {val_out}")
+        return False
+    print("That is correct!")
+    return True
+test_decide_to_bring_umbrella = ValueTest(validation_func=test_decide_to_bring_umbrella_validation_func)
+
 ethnicity_descr_hint = QuizHint(hints=[
+
+
     widgets.HTML(
         """Your plot should look something like:</br>
         <img src="media/ethnicity_descr_counts.png"></img>
