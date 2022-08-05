@@ -95,6 +95,73 @@ hint_severity_plot = QuizHint(
     ]
 )
 
+# 2.3
+quiz_categorical = SelectMultipleQuiz(answer=("Gender", "Index"),
+                   options=("Gender", "Height", "Weight", "Index"),
+                   shuffle_answer=False)
+
+quiz_index_0_3 = MultipleChoiceQuiz(description="How many subjects have an Index of 0, 3, and 5, respectively?",
+                   answer="13, 68, 198",
+                  options=["13, 68, 198", "68, 13, 198", "13, 22, 130"])
+
+quiz_mean_height_index3 = MultipleChoiceQuiz(description="What is the mean height for subjects with an Index of 3?",
+                  answer=175.99,
+                  options=(173.88, 13.5,173.87))
+
+quiz_median_weight_index5 = MultipleChoiceQuiz(description="What is the median height for subjects with an Index of 5?",
+                  answer=159.5,
+                  options=(190.0, 187.54,160.98))
+
+quiz_max_height_f0 = MultipleChoiceQuiz(description="What is the max height for a female subject with an index of 0?",
+                  answer=196,
+                  options=(195, 197, 140))
+
+hint_hist_index = QuizHint(hints=[
+    widgets.HTML(
+        """Your plot should look something like:</br>
+        <img src="media/hint_output_index_hist.png" width="45%"></img>
+        """)
+    ])
+
+hint_output_hw_scatter = QuizHint(hints=[
+    widgets.HTML(
+        """Your 3 plots should look something like these:</br>
+        <img src="media/hint_output_hw_scatter.png"></img>
+        """),
+    widgets.HTML("""
+    One way of filtering a dataset is using df.query("..."). Refer back to the previous notebooks for now to use this method.
+    """)
+    ])
+
+def test_df_height_sqrd_validation_func(actual):
+    import pandas as pd
+    if not isinstance(actual, pd.DataFrame):
+        print(f"Incorrect. Was expecting a pandas DataFrame, not {type(actual)}")
+        return
+    if "height_sqrd" not in actual.columns:
+        print(f"Incorrect. df should have a column called 'height_sqrd'. Your dataframe has columns {list(df.columns)}")
+        return
+    if ((actual["Height"] ** 2) != (actual["height_sqrd"])).sum() > 0:
+        print(f"'Height' and 'height_sqrd' do not always correspond. Check how you squared the 'Height' column.")
+    print("That is correct!")
+test_df_height_sqrd = FunctionTest(validation_func=test_df_height_sqrd_validation_func)
+
+def test_bmi_validation_func(actual):
+    import pandas as pd
+    import numpy as np
+    if not isinstance(actual, pd.Series):
+        print(f"Check the datatype of bmi. Expected a pandas Series, got {type(actual)}")
+    if len(actual) != 500:
+        print(f"Expected 500 rows, got {len(actual)}")
+    expected_values = np.array([31.70828379, 24.35542118, 32.14024836, 27.35042735, 27.47623981])
+    if not all(np.round(expected_values, 5) == np.round(actual.values[:len(expected_values)], 5)):
+        print(f"The first 5 rows of bmi don't match. \nExpected {expected[:5]}. \nGot {actual.iloc[:5].values}")
+    print("That is correct!")
+
+test_bmi = ValueTest(validation_func = test_bmi_validation_func)
+
+# 2.4
+
 ethnicity_descr_hint = QuizHint(hints=[
     widgets.HTML(
         """Your plot should look something like:</br>
