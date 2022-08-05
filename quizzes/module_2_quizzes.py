@@ -52,3 +52,46 @@ hint_severity_below_30= QuizHint(
         <img src="./media/output_filtered_severity.png" width="45%"></img>"""),
     ]
 )
+
+hint_change_plt_kwargs = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look like this:</br>
+        <img src="./media/output_plt_kwargs.png" width="45%"></img>"""),
+    ]
+)
+
+hint_non_parallel_lines = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look something like this:</br>
+        <img src="./media/output_non_parallel_lines.png" width="45%"></img>"""),
+    ]
+)
+
+hint_non_parallel_lines_seaborn = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look something like this:</br>
+        <img src="./media/output_non_parallel_lines_seaborn.png" width="45%"></img>"""),
+    ]
+)
+
+hint_distplot = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look something like this:</br>
+        <img src="./media/output_distplot.png" width="45%"></img>"""),
+    ]
+)
+
+hint_pois_barh = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look something like this:</br>
+        <img src="./media/output_pois_barh.png" width="45%"></img>"""),
+    ]
+)
+
+hint_severity_plot = QuizHint(
+    hints=[
+        widgets.HTML("""Your plot should look something like this:</br>
+        <img src="./media/output_pd_severity_plot.png" width="45%"></img>"""),
+    ]
+)
+
