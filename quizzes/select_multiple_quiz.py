@@ -48,7 +48,9 @@ class SelectMultipleQuiz(Quiz):
         if submitted == actual:
             self.response = "That is correct!"
         else:
-            self.response = "That is incorrect."
+            self.response = f"That is incorrect. " \
+                            f"You have selected {len(submitted.intersection(actual))}/{len(actual)} " \
+                            f"correct answers."
             if self.show_answer:
                 self.response += f" Expected '{self.answer}'. Got '{self.submitted}'"
 

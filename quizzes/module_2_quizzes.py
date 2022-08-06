@@ -295,4 +295,3 @@ in_hospital_mortality_rr_interpretation_quiz = MultipleChoiceQuiz("The interpret
                    answer=" 1.27 times more likely",
                    options=["1.27 times less likely", "Similarly likely"]
                   )
-

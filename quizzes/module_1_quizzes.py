@@ -231,7 +231,7 @@ quiz_select_all_true = SelectMultipleQuiz(description="""
 
                                           ],
                                           options=[
-                                              "not ((y != 10) & z >= 5)",
+                                              "not ((y == 10) & (z >= 5))",
                                               "y == z"
                                           ]
                                           )
