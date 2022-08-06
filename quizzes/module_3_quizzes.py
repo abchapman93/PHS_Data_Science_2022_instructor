@@ -96,3 +96,28 @@ def test_fixed_where_ambiguity_validation_func(actual):
 
 
 test_fixed_where_ambiguity = ValueTest(validation_func=test_fixed_where_ambiguity_validation_func)
+
+
+def test_query_dob_descending(actual):
+    import pandas as pd
+    if not isinstance(actual, pd.DataFrame):
+        print(f"Incorrect. df should be a pandas DataFrame, not {type(actual)}")
+        return
+    if len(actual) != 3:
+        print(f"Incorrect. df should have 3 rows. Your dataframe had {len(actual)}.")
+        return
+    if set(actual.columns) != {'subject_id', 'sex', 'dob', 'dod', 'hospital_expire_flg'}:
+        print(
+            f"Incorrect. Your dataframe should have columns ['subject_id', 'sex', 'dob', 'dod', 'hospital_expire_flg'], not {list(actual.columns)}")
+        return
+    if set(actual["subject_id"]) != {37, 78, 56}:
+        print(f"Incorrect. Your dataframe should have subject_id's (37, 78, 56), not {tuple(actual['subject_id'])}")
+        return
+    if tuple(actual["subject_id"]) != (37, 78, 56):
+        print(
+            f"Incorrect. Your dataframe should have subject ids in the order (37, 78, 56), not {tuple(actual['subject_id'])}")
+
+    print("That is correct!")
+
+
+test_query_dob_descending = ValueTest(validation_func=test_query_dob_descending)
