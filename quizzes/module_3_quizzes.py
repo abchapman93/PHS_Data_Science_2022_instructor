@@ -183,3 +183,26 @@ hint_boxplot_age_death_by_sex = QuizHint(hints=[
     """)
 ])
 
+quiz_count_n = MultipleChoiceQuiz(answer="There are 5,074 ICU admissions in MIMIC",
+                  options=["There are 5,074 patients in MIMIC.", "There are 5,074 columns in `admissions`."])
+
+quiz_count_ed_admit = MultipleChoiceQuiz(answer="3,193", options=["3,193", "5,074", "4,000", "2,000"])
+
+quiz_count_admission_source = MultipleChoiceQuiz(description="How many admissions had a source from the emergency room/transfer from a hospital, respectively?",
+                                                answer="3193; 957",
+                                                options=["3193; 211", "616; 79", "957; 3193"])
+
+hint_count_hospital_expire_by_sex = QuizHint(
+    hints=[widgets.HTML("Your query should select from a single table and have two group by columns. It may also be useful to have a WHERE clause.")]
+)
+
+quiz_count_hospital_expire_by_sex = MultipleChoiceQuiz("How many female/male patients, respectively, died in the hospital?",
+                  answer="809;841",
+                  options=["1047;1290", "841;809", "10;3"])
+
+quiz_error_ambiguous = MultipleChoiceQuiz("What do you think the error above means?",
+                  answer="More than one table has a column subject_id",
+                  options=["There is no column named subject_id", "There's no row where subject_id = 78"])
+
+quiz_summary_stats_age_years = FreeTextTest("Enter the min, max, mean, and standard deviations of age at death in years. </br>Round to the nearest whole number and enter each separated by a comma (e.g., '10,45,22,3')",
+                                           answer="0,105,72,16")
