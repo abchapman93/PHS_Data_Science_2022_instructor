@@ -206,3 +206,50 @@ quiz_error_ambiguous = MultipleChoiceQuiz("What do you think the error above mea
 
 quiz_summary_stats_age_years = FreeTextTest("Enter the min, max, mean, and standard deviations of age at death in years. </br>Round to the nearest whole number and enter each separated by a comma (e.g., '10,45,22,3')",
                                            answer="0,105,72,16")
+
+hint_plot_icd9_counts = QuizHint(
+    hints=[
+        widgets.HTML("""A good plot would look something like this. (Why is this better than a vertical bar plot?)</br>
+        <img src="./media/hint_plot_icd9_counts.png"></img>""")
+    ])
+
+quiz_unique_icd = FreeTextTest(answer="3846")
+
+quiz_total_icd9 = FreeTextTest(answer="53486")
+
+quiz_count_pna_by_sex = FreeTextTest(description="How many <strong>distinct</strong> female patients had a code for pneumonia?",
+                                     answer="430")
+
+def test_pna_codes_validation_func(actual):
+    import pandas as pd
+    if not isinstance(actual, pd.DataFrame):
+        print(f"Incorrect. pna_codes should be a pandas DataFrame, not {type(actual)}")
+        return
+    if len(actual) != 36:
+        print(f"Incorrect. pna_codes should have 36 rows. Your dataframe had {len(actual)}.")
+        return
+    if len(actual.columns) != 2 or {"code", "description"}.intersection(set(actual.columns)) != {"code", "description"}:
+        print(
+            f"Incorrect. pna_codes should have exactly 2 columns: 'code' and 'description'. Your dataframe has columns {list(actual.columns)}")
+        return
+    if {"486", "482.41"}.difference(set(actual["code"])):
+        print(
+            f"Incorrect. pna_codes should include codes '486' and '482.41'. Your dataframe has columns {list(actual.columns)}")
+        return
+    print("That is correct!")
+test_pna_codes = ValueTest(validation_func=test_pna_codes_validation_func)
+
+quiz_icd9_join_d_patients = SelectMultipleQuiz("<h4>TODO</h4>Which column(s)can be used to join icd9 with d_patients?",
+                  answer=["subject_id"],
+                  options=['subject_id', 'hadm_id', 'sequence', 'code', 'description'],
+                                                       shuffle_answer=False)
+
+quiz_icd9_join_demographic_detail = SelectMultipleQuiz("<h4>TODO</h4>Which column(s)can be used to join icd9 with demographic_detail?",
+                  answer=["subject_id", "hadm_id"],
+                  options=['subject_id', 'hadm_id', 'sequence', 'code', 'description'],
+                                                       shuffle_answer=False)
+
+quiz_count_distinct = MultipleChoiceQuiz("<h4>TODO</h4>How would you interpret the result of the previous query?",
+                                        answer="1,087 patients have had a code for diabetes",
+                                        options=["1,087 hospitalizations have had a code for diabetes",
+                                                "There are 1,087 unique codes for diabetes",])
