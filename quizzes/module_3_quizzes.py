@@ -217,6 +217,8 @@ quiz_unique_icd = FreeTextTest(answer="3846")
 
 quiz_total_icd9 = FreeTextTest(answer="53486")
 
+hint_pna_by_sex = QuizHint(hints=[widgets.HTML("The sex variable can be found in the table d_patients.")])
+
 quiz_count_pna_by_sex = FreeTextTest(description="How many <strong>distinct</strong> female patients had a code for pneumonia?",
                                      answer="430")
 
@@ -253,3 +255,13 @@ quiz_count_distinct = MultipleChoiceQuiz("<h4>TODO</h4>How would you interpret t
                                         answer="1,087 patients have had a code for diabetes",
                                         options=["1,087 hospitalizations have had a code for diabetes",
                                                 "There are 1,087 unique codes for diabetes",])
+
+quiz_pna_cmrbd = MultipleChoiceQuiz("What is the most common co-morbidity for patients with pneumonia codes? How many patients have that code?",
+                  answer="CONGESTIVE HEART FAILURE UNSPECIFIED; 377",
+                  options=["ATRIAL FIBRILLATION; 303", "CONGESTIVE HEART FAILURE UNSPECIFIED; 359", "ACUTE RESPIRATORY FAILURE; 359"])
+
+hint_pna_prop_cmrbd = QuizHint(
+    hints=[
+        widgets.HTML("""One way to do this is to get the count of patients with a pneumonia code and then divide the DataFrame column "n" by this number</br>
+        <img src="./media/hint_pna_prop_cmrbd.png" width="50%"></img>""")
+    ])
