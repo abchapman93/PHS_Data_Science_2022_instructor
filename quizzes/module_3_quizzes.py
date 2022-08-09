@@ -322,3 +322,17 @@ def test_glucose_coalesce_validation_func(actual):
 
 
 test_glucose_coalesce = ValueTest(validation_func=test_glucose_coalesce_validation_func)
+
+quiz_label_455 = MultipleChoiceQuiz("<h4>TODO</h4> What is the label for the itemid 455?",
+                  answer="NBP",
+                  options=['ABP', 'Arterial BP', 'NBP', 'Arterial BP #2'])
+
+hint_systolic_v_diastolic = QuizHint(hints=[
+    widgets.HTML("We looked at a similar problem in notebook 2.3 when we compared height and weight."),
+    widgets.HTML("""Your visualization should look something like this:.</br>
+    <img src="./media/hint_systolic_v_diastolic.png" width="50%">"""),
+])
+
+quiz_missing_bp = MultipleChoiceQuiz(answer="The results weren't measured or entered correctly.", options=["The patient didn't have any blood pressure.",
+"The blood pressure was normal.",
+                                                           "The results weren't measured or entered correctly.",])
