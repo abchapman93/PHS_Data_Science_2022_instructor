@@ -304,6 +304,12 @@ hint_summary_glucose = QuizHint(hints=[
     """)
 ])
 
+hint_glucose_value_by_flag = QuizHint(hints=[
+    widgets.HTML("""Your output could look something like this:</br>
+    <img src="./media/hint_output_glucose_value_by_flag.png" width="50%">
+    """)
+])
+
 quiz_none_glucose = MultipleChoiceQuiz(answer="The test was normal.", options=["The patient didn't have any glucose.", "The results weren't entered in correctly.",])
 
 quiz_coalesce_helloworld = MultipleChoiceQuiz(answer="'hello'", options=["'hello'", "'world'", "NULL"])
