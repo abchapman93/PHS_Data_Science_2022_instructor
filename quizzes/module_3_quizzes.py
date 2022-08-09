@@ -265,3 +265,60 @@ hint_pna_prop_cmrbd = QuizHint(
         widgets.HTML("""One way to do this is to get the count of patients with a pneumonia code and then divide the DataFrame column "n" by this number</br>
         <img src="./media/hint_pna_prop_cmrbd.png" width="50%"></img>""")
     ])
+
+def test_labs_28766_validation_func(actual):
+    import pandas as pd
+    if not isinstance(actual, pd.DataFrame):
+        print(f"Incorrect. labs_28766 should be a pandas DataFrame, not {type(actual)}")
+        return
+    if len(actual) != 134:
+        print(f"Incorrect. labs_28766 should have 36 rows. Your dataframe had {len(actual)}.")
+        return
+    if {"value", "loinc_code"}.intersection(set(actual.columns)) != {"value", "loinc_code"}:
+        print(
+            f"Incorrect. labs_28766 should include columns labenets.value and d_labitems.loinc_code. Your dataframe has columns {list(actual.columns)}")
+        return
+    if set(actual["hadm_id"]) != {28766}:
+        print(
+            f"Incorrect. labs_28766 should only have a single hadm_id, not {set(actual['hadm_id'])}"
+        )
+        return
+    print("That is correct!")
+test_labs_28766 = ValueTest(validation_func=test_labs_28766_validation_func)
+
+quiz_category_glucose = FreeTextTest("What is the value of the category column for the LOINC code '2345-7'?", answer="CHEMISTRY")
+
+quiz_avg_glucose = MultipleChoiceQuiz("What is the average value of '2345-7'?",
+                  answer="134.33",
+                  options=["2516", "286.11", "101.11"])
+
+hint_viz_glucose = QuizHint(hints=[
+    widgets.HTML("""One option is a histogram using seaborn:</br>
+    <img src="./media/hint_hist_glucose.png" width="35%">
+    """)
+])
+
+hint_summary_glucose = QuizHint(hints=[
+    widgets.HTML("""The values will differ based on your random sample, but your output could look something like this:</br>
+    <img src="./media/hint_glucose_summary.png" width="35%">
+    """)
+])
+
+quiz_none_glucose = MultipleChoiceQuiz(answer="The test was normal.", options=["The patient didn't have any glucose.", "The results weren't entered in correctly.",])
+
+quiz_coalesce_helloworld = MultipleChoiceQuiz(answer="'hello'", options=["'hello'", "'world'", "NULL"])
+
+
+def test_glucose_coalesce_validation_func(actual):
+    import pandas as pd
+    if not isinstance(actual, pd.DataFrame):
+        print(f"Incorrect. glucose2 should be a pandas DataFrame, not {type(actual)}")
+        return
+    if set(actual["flag"]) != {"abnormal", "normal"}:
+        print(
+            f"Incorrect. The flag column should have two values: 'abnormal' and 'normal'. Yours has {set(actual['flag'])}")
+        return
+    print("That is correct!")
+
+
+test_glucose_coalesce = ValueTest(validation_func=test_glucose_coalesce_validation_func)
