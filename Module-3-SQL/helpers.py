@@ -2,6 +2,7 @@ import sys
 sys.path.append("..")
 
 from quizzes.module_3_quizzes import *
+from quizzes.module_3_exercise_quizzes import *
 
 import ipywidgets as widgets
 
