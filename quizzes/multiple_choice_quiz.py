@@ -13,7 +13,8 @@ class MultipleChoiceQuiz(Quiz):
             shuffle(options)
         self.options = options
         self._options = widgets.RadioButtons(
-            options=self.options
+            options=self.options,
+            layout=widgets.Layout(width='auto')
         )
 
         self.submitted = None
