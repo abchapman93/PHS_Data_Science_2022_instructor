@@ -7,6 +7,22 @@ from .quiz_hint import QuizHint
 from datetime import datetime
 import ipywidgets as widgets
 
+quiz_disch_summ1 = MultipleChoiceQuiz("What is the main reason the patient came to the hospital?",
+                  answer="He was experiencing shortness of breath.",
+                  options=[
+                      "He was referred by his oncologist.",
+                      "He had a fever."
+                  ])
+
+quiz_disch_summ2 = SelectMultipleQuiz("Which of the following conditions does the patient have?.",
+                  answer=["Congestive Heart Failure", "Diabetes", "Cancer"],
+                  options=["Pneumonia", "Coronary Artery Disease"]
+                  )
+
+quiz_disch_summ3 = MultipleChoiceQuiz("The patient doesn't have any living relatives.", answer="False", shuffle_answer=False)
+
+quiz_disch_summ4 = FreeTextTest("How many episodes of chest pain has the patient had in the last few weeks?", answer=["5", "five"])
+
 quiz_text_3 = MultipleChoiceQuiz("""<h4>TODO</h4>Using the variable `text` that we defined above, what would be the value of
 <p style="font-family:courier";>text[3]</p>""", answer="e",
                   options=["i", "Chi", "e", "E"])

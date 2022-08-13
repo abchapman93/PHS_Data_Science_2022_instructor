@@ -76,6 +76,7 @@ class QuizHint:
             hint.value = ""
         self._num_displayed = 0
         self._set_hints_button(False)
+        self._set_description()
 
     def display(self):
         """Display the Box widget in the current IPython cell."""
