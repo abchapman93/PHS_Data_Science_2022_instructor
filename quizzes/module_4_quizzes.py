@@ -206,3 +206,234 @@ hint_discharge_summ_target_rules = QuizHint(hints=[
     widgets.HTML("""Here is processed text using these rules:</br>
     <img src="./media/hint_disch_summ_extracted.png" width="70%"></img>""")
 ])
+
+
+def build_nlp_context(rules=True):
+    import medspacy
+    from medspacy.target_matcher import TargetRule
+    if rules:
+        nlp = medspacy.load()
+    else:
+        nlp = medspacy.load(disable=["medspacy_context"])
+        nlp.add_pipe("medspacy_context", config={"rules": False})
+
+    target_rules = [
+        TargetRule("pneumonia", "DIAGNOSIS"),
+        TargetRule("bronchitis", "DIAGNOSIS"),
+        TargetRule("nephrectomy", "PROCEDURE"),
+        TargetRule("pneumothorax", "DIAGNOSIS"),
+        TargetRule("breast cancer", "DIAGNOSIS"),
+        TargetRule("warfarin", "MEDICATION"),
+        TargetRule("rash", "SIGN/SYMPTOM"),
+        TargetRule("diabetes", "DIAGNOSIS"),
+
+        TargetRule("COVID-19", "DIAGNOSIS", pattern=r"covid-?(19)?"),
+        TargetRule("SARS-COV-2", "DIAGNOSIS")
+    ]
+
+    nlp.get_pipe("medspacy_target_matcher").add(target_rules)
+
+    return nlp
+
+quiz_pneumonia_negated_select_multiple = SelectMultipleQuiz(
+    "Select all sentences where pneumonia is negated.",
+    answer=[1, 3], options=list(range(1,6)), shuffle_answer=False)
+
+quiz_context_attributes1 = SelectMultipleQuiz(
+    "He was previously <strong>homeless</strong>.",
+    answer=["is_historical"],
+    options=["is_negated", "is_historical", "is_uncertain", "is_family", "is_hypothetical"],
+    shuffle_answer=False
+)
+
+quiz_context_attributes2 = SelectMultipleQuiz(
+    "If you develop any <strong>bleeding</strong>, go to the ER right away.",
+    answer=["is_hypothetical"],
+    options=["is_negated", "is_historical", "is_uncertain", "is_family", "is_hypothetical"],
+    shuffle_answer=False
+)
+
+quiz_context_attributes3 = SelectMultipleQuiz(
+    "Her father had a <strong>heart attack</strong> in 1996.",
+    answer=["is_historical", "is_family"],
+    options=["is_negated", "is_historical", "is_uncertain", "is_family", "is_hypothetical"],
+    shuffle_answer=False
+)
+
+quiz_context_attributes4 = SelectMultipleQuiz(
+    "The patient presents with symptoms concerning for <strong>Covid-19</strong>.",
+    answer=["is_uncertain"],
+    options=["is_negated", "is_historical", "is_uncertain", "is_family", "is_hypothetical"],
+    shuffle_answer=False
+)
+
+quiz_context_attributes5 = SelectMultipleQuiz(
+    "He lives with his <strong>two daughters.</strong>",
+    answer=[],
+    options=["is_negated", "is_historical", "is_uncertain", "is_family", "is_hypothetical"],
+    shuffle_answer=False
+)
+
+def test_classify_covid_validation_func(func):
+    nlp = build_nlp_context()
+    texts = [
+        "The patient has Covid-19.",
+        "Her husband recently came down with Covid. He is isolated and doing okay. She tested positive for SARS-COV-2 one week later.",
+        "If you test positive for SARS-COV-2, isolate according to CDC guidelines.",
+        "She recently had a positive PCR for Covid-19.",
+        "She had symptoms which were concerning for Covid-19 but her Covid test was negative."
+    ]
+    labels = ["POS", "POS", "NEG", "POS", "NEG"]
+    for (text, label) in zip(texts, labels):
+        doc = nlp(text)
+        pred = func(doc)
+        if pred != label:
+            print(f"Incorrect. Expected {label}, got {pred} for doc: '{text}'")
+            return
+    print("That is correct!")
+test_classify_covid = ValueTest(validation_func=test_classify_covid_validation_func)
+
+hint_custom_context = QuizHint(hints=[
+    widgets.HTML("""Here is output of the processed texts with added target rules and context rules:</br></br>
+    <img src="./media/hint_custom_context.png" width="75%"></img>""")
+])
+
+
+def test_load_nlp_validation_func(nlp):
+    from spacy.lang.en import English
+    if not isinstance(nlp, English):
+        print(f"Incorrect. nlp should have type spacy.lang.en.English, not {type(nlp)}")
+        return
+
+    expected_pipe_names = ['medspacy_pyrush', 'medspacy_target_matcher', 'medspacy_context']
+    if (actual_pipe_names := nlp.pipe_names) != expected_pipe_names:
+        print(f"Incorrect. nlp.pipe_names should be {expected_pipe_names}, not {actual_pipe_names}")
+
+    print("That is correct!")
+
+test_load_nlp = ValueTest(validation_func=test_load_nlp_validation_func)
+
+def test_load_nlp_add_sectionizer_validation_func(nlp):
+    from spacy.lang.en import English
+    if not isinstance(nlp, English):
+        print(f"Incorrect. nlp should have type spacy.lang.en.English, not {type(nlp)}")
+        return
+
+    expected_pipe_names = ['medspacy_pyrush', 'medspacy_target_matcher', 'medspacy_context', "medspacy_sectionizer"]
+    if (actual_pipe_names := nlp.pipe_names) != expected_pipe_names:
+        print(f"Incorrect. nlp.pipe_names should be {expected_pipe_names}, not {actual_pipe_names}")
+
+    print("That is correct!")
+
+test_load_nlp_add_sectionizer = ValueTest(validation_func=test_load_nlp_add_sectionizer_validation_func)
+
+quiz_pna_annotation1 = MultipleChoiceQuiz(
+    """<p style="font-family:courier";>
+    REASON FOR THIS EXAMINATION:</br>
+      Please evaluate for infiltrates. </br>
+      </br>
+     IMPRESSION: </br>No radiographic evidence of pneumonia.</p></br>""",
+    answer=0,
+    options=[0, 1], shuffle_answer=False
+)
+
+quiz_pna_annotation2 = MultipleChoiceQuiz(
+    """<p style="font-family:courier";>IMPRESSION:  Findings consistent with CHF, although underlying bilateral lower</br>
+     lobe pneumonias cannot be excluded. Follow up.</p></br>""",
+    answer=1,
+    options=[0, 1], shuffle_answer=False
+)
+
+quiz_pna_annotation3 = MultipleChoiceQuiz(
+    """<p style="font-family:courier";>IMPRESSION:</br>
+     1. Mild CHF.</br>
+     2. Left lower lobe consolidation with effusion, probably representing pneumonia.</p></br>""",
+    answer=1,
+    options=[0, 1], shuffle_answer=False
+)
+
+quiz_pna_annotation4 = MultipleChoiceQuiz(
+    """<p style="font-family:courier";>IMPRESSION:</br>
+
+     1) Tubes and lines as described above.</br>
+
+     2) No acute infiltrate or consolidation.</p></br>""",
+    answer=0,
+    options=[0, 1], shuffle_answer=False
+)
+
+quiz_num_pna_notes = FreeTextTest("How many notes are annotated in this dataset?", answer=140)
+
+quiz_num_pos_pna_notes = MultipleChoiceQuiz("How proportion of notes are annotated as positive?",
+                                           answer="49%",
+                                           options=["68", "68%", "34%"])
+
+test_classify_pna_1 = ValueTest(expected=0)
+test_classify_pna_2 = ValueTest(expected=1)
+
+
+def evaluate_system(df):
+    import pandas as pd
+    """Evaluate the predictions made by the NLP system and compare against the reference standard
+    and baseline NLP system. Returns a DataFrame with nlp and baseline scores."""
+    from sklearn.metrics import classification_report
+    rslts_baseline = classification_report(df["document_classification"], df["baseline_document_classification"],
+                                           output_dict=True)
+    rslts_nlp = classification_report(df["document_classification"], df["nlp_document_classification"],
+                                      output_dict=True)
+    cols = ("system", "accuracy", "precision", "recall", "f1-score", "n_positive", "n_total")
+    rows = []
+    for name, rslts in zip(("baseline", "nlp"), (rslts_baseline, rslts_nlp)):
+        rows.append(
+            (name, rslts["accuracy"], rslts["1"]["precision"], rslts["1"]["recall"],
+             rslts["1"]["f1-score"], rslts["1"]["support"], len(df)))
+    return pd.DataFrame(rows, columns=cols)
+
+def read_pneumonia_data(train_test="train", n_random=None):
+    directory = f"../data"
+    import os
+    import pandas as pd
+    filepath = os.path.join(directory, f"pneumonia_data_{train_test}.json")
+    print("Reading data from:", filepath)
+
+    df = pd.read_json(filepath)
+    if n_random is not None:
+        df = df.sample(n=n_random).reset_index(drop=True)
+    return df
+
+def read_doc_annotations(train_test="train", n=None):
+    import os
+    directory = f"../data/pneumonia_data/{train_test}/"
+    import pandas as pd
+    print('Reading annotations from directory : ' + directory)
+    data = []
+
+    filenames = os.listdir(directory)
+    if n is not None:
+        filenames = filenames[:n]
+    for name in filenames:
+        if name.endswith('.txt') or name.endswith('.ann'):
+            basename = name.split('.')[0]
+            text_fp = os.path.join(directory, basename + ".txt")
+            anno_fp = os.path.join(directory, basename + ".ann")
+            with open(text_fp) as f:
+                text = f.read()
+            document_classification = read_document_annotation(anno_fp)
+            data.append((basename, text, document_classification))
+    df = pd.DataFrame(data, columns=["filename", "text", "document_classification", ])
+
+    return df
+
+def read_document_annotation(fp):
+    with open(fp) as f:
+        for line in f:
+            if "PNEUMONIA_DOC_NO" in line:
+                return 0
+            if "PNEUMONIA_DOC_YES" in line:
+                return 1
+    return
+
+def add_document_classifications(df, docs, classify_pna):
+    df["nlp_document_classification"] = [classify_pna(doc) for doc in docs]
+    df["doc"] = docs
+    return df
