@@ -298,6 +298,26 @@ hint_custom_context = QuizHint(hints=[
     <img src="./media/hint_custom_context.png" width="75%"></img>""")
 ])
 
+quiz_note_categories = SelectMultipleQuiz("Which of the following note types are stored in MIMIC?.",
+                                         answer=['DISCHARGE_SUMMARY', 'MD Notes', 'Nursing/Other', 'RADIOLOGY_REPORT'],
+                                         options=['DISCHARGE_SUMMARY', "EMERGENCY_NOTE", 'MD Notes', 'Nursing/Other', "PROGRESS_NOTE", 'RADIOLOGY_REPORT']
+                                         )
+
+
+quiz_pna_in_disch_summ = MultipleChoiceQuiz("""<h4>TODO</h4>
+The doc above should have an entity of pneumonia highlighted. What section of the note did that occur in?""",
+                    answer="MRI (Imaging)",
+                    options=[
+                        "Chief Complaint",
+                        "Hospital Course",
+                        "Pertinent Results (Labs and Studies)"
+                    ])
+
+quiz_n_rad_reports = FreeTextTest("How many radiology reports did this hospitalization have?", answer=[5, "five"])
+quiz_rad_interpretation = SelectMultipleQuiz("""<h4>TODO</h4>
+According to radiology report #3, what does the radiologist think caused the rounded opacity overlying the left ilium?
+Select all that apply.""",
+                  answer=["Aspiration Pneumonia", "Left Hilar Mass", "Scoliosis", "Complications from Ventilation"])
 
 def test_load_nlp_validation_func(nlp):
     from spacy.lang.en import English
@@ -437,3 +457,4 @@ def add_document_classifications(df, docs, classify_pna):
     df["nlp_document_classification"] = [classify_pna(doc) for doc in docs]
     df["doc"] = docs
     return df
+
