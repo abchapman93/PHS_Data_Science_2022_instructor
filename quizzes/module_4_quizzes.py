@@ -7,6 +7,68 @@ from .quiz_hint import QuizHint
 from datetime import datetime
 import ipywidgets as widgets
 
+disch_summ = """
+Service: MEDICINE
+
+Chief Complaint:
+5 days worsening SOB, DOE
+
+History of Present Illness:
+Pt is a 63M w/ h/o metastatic carcinoid tumor, HTN, 
+hyperlipidemia who reports increasing SOB and DOE starting about 
+a month ago but worsening significantly within the last 5 days. 
+It has recently gotten so bad he can barely get up out of a 
+chair without getting short of breath. He reports orthopnea but no PND. 
+
+He reports no fever or chills, no URI symptoms, no recent travel, no changes 
+in his medications.
+
+Pt also reports ~5 episodes of chest pain in the last few weeks 
+which he describes as pressure on his mid-sternum and usually 
+occurs during exertion.
+
+Past Medical History:
+1. metastatic carcinoid tumor, Dx'ed 2002
+2. hypertension
+3. hyperlipidemia
+4. carotid endarterectomy 1999
+5. depression/anxiety
+
+Social History:
+Previously homeless, now lives with two daughters. Currently employed full-time.
+
+Family History:
+early CAD
+
+Brief Hospital Course:
+1. SOB: likely from CHF
+The patient was initially diuresed for mild pulmonary edema: he 
+received 20 IV Lasix on night of admission and 40mg [**9-10**], with 
+good UOP. On [**9-10**], pt was reporting improvement of symptoms and 
+able to walk around his room with 4L O2 NC. The following day he 
+reported feeling worse, with increasing SOB, and was found to 
+now be in oliguric renal failure. CXR [**9-11**] 8am showed showed 
+atelectasis with possible superimposed pneumonia. Emergent TTE 
+showed decreased EF (30%), anteroapical infarct with 
+moderate-to-severe overall left ventricular contractile 
+dysfunction; bicusapid aortic valve with at least mild aortic 
+stenosis. He was sent to the MICU.
+
+Medications on Admission:
+ASA 81mg po qd
+Lipitor 20mg po qpm
+
+Discharge Disposition:
+Extended Care
+Discharge Diagnosis:
+Primary: congestive heart failure
+Secondary: metastatic carcinoid tumor, hypertension, 
+hyperlipidemia, diabetes mellitus type 2, basal cell carcinoma
+
+Discharge Condition:
+good, stable
+"""
+
 quiz_disch_summ1 = MultipleChoiceQuiz("What is the main reason the patient came to the hospital?",
                   answer="He was experiencing shortness of breath.",
                   options=[
@@ -77,4 +139,70 @@ quiz_mc_pneumonia_in_text = MultipleChoiceQuiz("If the function above returns Tr
 
 hint_generate_chief_complaint = QuizHint(hints=[
     widgets.HTML("""Your output should like like:</br><img src="./media/hint_generate_chief_complaint.png" width="75%"></img>""")
+])
+
+quiz_medical_concepts_1 = MultipleChoiceQuiz("""
+Pt is a 63M w/ h/o <strong>metastatic carcinoid tumor</strong>, <strong>HTN</strong> and <strong>hyperlipidemia</strong>
+""",
+                  options=["Diagnoses", "Medications", "Signs and Symptoms", "Social Determinants"],
+                   answer="Diagnoses"
+                  )
+
+quiz_medical_concepts_2 = MultipleChoiceQuiz("""
+Medications on Admission:
+<ol>
+<li> <strong>ASA 81mg po qd</strong></li>
+<li><strong>Lipitor 20mg po qpm</strong> </li>
+</ul>
+""",
+        options=["Diagnoses", "Medications", "Signs and Symptoms", "Social Determinants"],
+        answer="Medications"
+                  )
+
+quiz_medical_concepts_3 = MultipleChoiceQuiz("""
+Previously <strong>homeless</strong> 2012-2013. Currently <strong>lives with his two daughters</strong>. 
+He is <strong>employed full-time</strong>.
+""",
+                  options=["Diagnoses", "Medications", "Signs and Symptoms", "Social Determinants"],
+                   answer="Social Determinants"
+                  )
+
+def test_dx_text_validation_func(doc):
+    if len(doc.ents) != 3:
+        print(f"Incorrect. doc should have 3 ents, not {len(doc.ents)}")
+        return
+    if (ent_labels := {ent.label_ for ent in doc.ents}) != {"DIAGNOSIS"}:
+        print(f"Incorrect. doc should only have 'DIAGNOSIS' entities, your doc has {ent_labels}")
+        return
+    expected_texts = {"metastatic carcinoid tumor", "HTN", "hyperlipidemia"}
+    if (ent_texts := {ent.text for ent in doc.ents}) != expected_texts:
+        print(f"Incorrect. Your doc has entities {ent_texts}, should have {expected_texts}")
+        return
+    print("That is correct!")
+test_dx_text = ValueTest(validation_func=test_dx_text_validation_func)
+
+def test_ckd_stage_x_validation_func(nlp):
+    for text in ["CKD Stage 3", "ckd stage 4", "ckd stage 5", "ckd"]:
+        doc = nlp(text)
+        if len(doc.ents) != 1:
+            print(f"Doc should have 1 ent, not {len(doc.ents)} for '{doc}'")
+            return
+        ent = doc.ents[0]
+        if "stage" in text:
+            if (ent[:2].text.lower() != "ckd stage") or (ent[-1].text.lower() not in ("3", "4", "5")):
+                print(f"Incorrect entity '{ent}' in '{doc}'")
+                return
+        if ent.label_ != "DIAGNOSIS":
+            print(f"ent should have a label of 'DIAGNOSIS', not '{ent.label_}'")
+            return
+    print("That is correct!")
+
+
+test_ckd_stage_x = ValueTest(validation_func=test_ckd_stage_x_validation_func)
+
+hint_discharge_summ_target_rules = QuizHint(hints=[
+    widgets.HTML("""Here is an example of some rules:</br>
+    <img src="./media/hint_disch_summ_target_rules.png" width="60%"></img>"""),
+    widgets.HTML("""Here is processed text using these rules:</br>
+    <img src="./media/hint_disch_summ_extracted.png" width="70%"></img>""")
 ])
