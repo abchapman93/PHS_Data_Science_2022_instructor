@@ -85,6 +85,32 @@ quiz_disch_summ3 = MultipleChoiceQuiz("The patient doesn't have any living relat
 
 quiz_disch_summ4 = FreeTextTest("How many episodes of chest pain has the patient had in the last few weeks?", answer=["5", "five"])
 
+quiz_precision = MultipleChoiceQuiz("What is the precision/PPV of the system?", answer=0.727, options=[0.4, 0.727, 0.8, 0.9, ],
+                                   shuffle_answer=False)
+
+quiz_recall = MultipleChoiceQuiz("What is the recall/sensitivity of the system?", answer=0.8, options=[0.4, 0.727, 0.8, 0.9, ],
+                                shuffle_answer=False)
+
+hint_covid_performance = QuizHint("This hint is for the following quiz.", hints=[
+    widgets.HTML("""Of the 100 patients who have Covid, how many were classified as positive? """),
+    widgets.HTML("""Are there any negative patients who were classified as positive? """),
+])
+
+quiz_covid_performance = MultipleChoiceQuiz("""What is the estimated prevalence of Covid?""",
+                  answer="0.075",
+                  options=["0.075", "0.15", "0.2", "0.05"])
+
+quiz_rule_based_v_statistical1 = MultipleChoiceQuiz("""To identify patients with cancer, you review notes and annotate cases of cancer in text. 
+You then feed your annnotations into a deep neural network which makes predictions on new documents.""",
+                  answer="Statistical",
+                  options=["Rule-Based", "Statistical"])
+
+quiz_rule_based_v_statistical2 = MultipleChoiceQuiz("""You build a Covid-19 surveillance system with NLP which identifies patients who are positive for Covid.  
+You first identify terms which refer to Covid such as 'COVID-19', 'SARS-COV-2', 'novel coronavirus'.
+Then you implement logic to exclude mentions which refer to past medical history or to being exposed to someone else with Covid.""",
+                  answer="Rule-Based",
+                  options=["Rule-Based", "Statistical"])
+
 quiz_text_3 = MultipleChoiceQuiz("""<h4>TODO</h4>Using the variable `text` that we defined above, what would be the value of
 <p style="font-family:courier";>text[3]</p>""", answer="e",
                   options=["i", "Chi", "e", "E"])
